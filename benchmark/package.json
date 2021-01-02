@@ -1,0 +1,8 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@intrnl/srv": "link:../",
+		"express": "^4.17.1",
+		"polka": "^0.5.2"
+	}
+}
