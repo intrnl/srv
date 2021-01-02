@@ -1,6 +1,6 @@
 # `srv`
 
-Lightweight, Koa-like web framework
+Lightweight, Koa-inspired web framework
 
 ## Usage
 
