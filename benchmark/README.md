@@ -33,7 +33,6 @@ Transfer/sec:      1.92MB
 Requests/sec:  16306.11
 Transfer/sec:      2.04MB
 
-  8 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
     Latency     5.71ms  433.68us  17.93ms   87.50%
     Req/Sec     2.11k   125.41     2.37k    78.29%
@@ -45,7 +44,6 @@ Transfer/sec:      2.10MB
 ## express
 
 ```
-  8 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
     Latency    25.09ms    5.15ms 103.38ms   91.95%
     Req/Sec   481.31     80.07   606.00     74.38%
