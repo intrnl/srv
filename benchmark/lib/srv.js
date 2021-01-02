@@ -16,6 +16,6 @@ let app = new Application()
 	.mount('/', one, two)
 	.route('GET', '/favicon.ico', () => {})
 	.route('GET', '/', ({ response }) => { response.body = 'Hello' })
-	.route('GET', '/user/:id', ({ response, router }) => { response.body = `User: ${router.params.id}` });
+	.route('GET', '/user/:id', ({ request, response }) => { response.body = `User: ${request.params.id}` });
 
 http.createServer(app.handler).listen(3030);
