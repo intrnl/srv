@@ -9,52 +9,70 @@ wrk -t8 -c100 -d30s http://localhost:3030/user/123
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     7.72ms    1.90ms  65.80ms   97.59%
-    Req/Sec     1.58k   181.22     1.81k    95.58%
-  376815 requests in 30.01s, 56.42MB read
-Requests/sec:  12556.35
-Transfer/sec:      1.88MB
+    Latency     7.14ms    2.07ms  66.69ms   97.68%
+    Req/Sec     1.71k   210.52     1.94k    95.79%
+  409428 requests in 30.02s, 61.30MB read
+Requests/sec:  13640.40
+Transfer/sec:      2.04MB
 
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     7.48ms  666.36us  21.98ms   95.46%
-    Req/Sec     1.61k   152.50     5.76k    95.17%
-  385134 requests in 30.10s, 57.66MB read
-Requests/sec:  12795.02
-Transfer/sec:      1.92MB
+    Latency     6.95ms  500.17us  25.99ms   89.40%
+    Req/Sec     1.74k   100.72     1.94k    88.04%
+  414780 requests in 30.02s, 62.10MB read
+Requests/sec:  13816.79
+Transfer/sec:      2.07MB
 ```
 
 ## polka
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     5.96ms    1.92ms  71.87ms   97.50%
-    Req/Sec     2.05k   343.31    14.12k    96.29%
-  490793 requests in 30.10s, 61.32MB read
-Requests/sec:  16306.11
-Transfer/sec:      2.04MB
+    Latency     5.68ms    1.74ms  66.80ms   98.08%
+    Req/Sec     2.15k   246.86     2.72k    95.50%
+  514567 requests in 30.02s, 64.29MB read
+Requests/sec:  17139.35
+Transfer/sec:      2.14MB
 
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     5.71ms  433.68us  17.93ms   87.50%
-    Req/Sec     2.11k   125.41     2.37k    78.29%
-  504308 requests in 30.01s, 63.00MB read
-Requests/sec:  16806.72
-Transfer/sec:      2.10MB
+    Latency     5.46ms  446.87us  16.19ms   87.69%
+    Req/Sec     2.21k   138.88     3.27k    79.50%
+  527749 requests in 30.02s, 65.93MB read
+Requests/sec:  17578.28
+Transfer/sec:      2.20MB
 ```
 
 ## express
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    25.09ms    5.15ms 103.38ms   91.95%
-    Req/Sec   481.31     80.07   606.00     74.38%
-  115036 requests in 30.01s, 25.78MB read
-Requests/sec:   3832.90
+    Latency    25.03ms    5.71ms 135.22ms   93.24%
+    Req/Sec   484.19     79.26   606.00     75.19%
+  115673 requests in 30.03s, 25.92MB read
+Requests/sec:   3852.19
 Transfer/sec:      0.86MB
 
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    24.19ms    2.62ms  55.28ms   85.24%
-    Req/Sec   497.98     53.05   606.00     75.67%
-  119029 requests in 30.02s, 26.68MB read
-Requests/sec:   3965.63
-Transfer/sec:      0.89MB
+    Latency    25.83ms    4.21ms  99.65ms   92.58%
+    Req/Sec   467.19     59.19   606.00     82.46%
+  111708 requests in 30.02s, 25.04MB read
+Requests/sec:   3720.66
+Transfer/sec:    853.86KB
+```
+
+## koa + koa-router
+
+```
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     7.75ms    2.72ms  72.60ms   97.23%
+    Req/Sec     1.59k   223.84     1.82k    95.67%
+  380377 requests in 30.02s, 62.39MB read
+Requests/sec:  12671.85
+Transfer/sec:      2.08MB
+
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     7.55ms  775.63us  35.35ms   97.14%
+    Req/Sec     1.60k   109.62     1.80k    94.12%
+  381677 requests in 30.02s, 62.61MB read
+Requests/sec:  12714.80
+Transfer/sec:      2.09MB
 ```
