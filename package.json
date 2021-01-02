@@ -11,5 +11,10 @@
 		"./middlewares/*": "./lib/middlewares/*.js",
 		"./request/*": "./lib/request/*.js",
 		"./response/*": "./lib/response/*.js"
-	}
+	},
+	"files": [
+		"lib/",
+		"README.md",
+		"LICENSE"
+	]
 }
