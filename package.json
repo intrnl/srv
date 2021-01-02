@@ -2,6 +2,7 @@
 	"type": "module",
 	"name": "@intrnl/srv",
 	"version": "0.1.0",
+	"license": "MIT",
 	"main": "lib/index.js",
 	"exports": {
 		".": "./lib/index.js",
