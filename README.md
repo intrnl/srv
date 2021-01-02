@@ -28,7 +28,7 @@ app.mount('/', async ({ request, response }, next) => {
 });
 
 app.route('get', '/', async ({ request, response }) => {
-  response.send({ message: 'Hello world!' });
+  response.body = { message: 'Hello world!' };
 });
 
 let server = http.createServer(app.handler);
