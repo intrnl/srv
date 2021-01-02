@@ -1,0 +1,14 @@
+{
+	"type": "module",
+	"name": "@intrnl/srv",
+	"version": "0.1.0",
+	"main": "lib/index.js",
+	"exports": {
+		".": "./lib/index.js",
+		"./internal/*": "./lib/internal/*.js",
+		"./application/*": "./lib/application/*.js",
+		"./middlewares/*": "./lib/middlewares/*.js",
+		"./request/*": "./lib/request/*.js",
+		"./response/*": "./lib/response/*.js"
+	}
+}
