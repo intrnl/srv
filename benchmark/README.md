@@ -1,11 +1,13 @@
 As with any other benchmarks, this is not representative of real world usage,
 most performance slowdowns could be attributed to your *application* code.
 
+## GET request
+
 ```
 wrk -t8 -c100 -d30s http://localhost:3030/user/123
 ```
 
-## srv
+### srv
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -23,7 +25,7 @@ Requests/sec:  13816.79
 Transfer/sec:      2.07MB
 ```
 
-## polka
+### polka
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -41,7 +43,7 @@ Requests/sec:  17578.28
 Transfer/sec:      2.20MB
 ```
 
-## express
+### express
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -59,7 +61,7 @@ Requests/sec:   3720.66
 Transfer/sec:    853.86KB
 ```
 
-## koa + koa-router
+### koa + koa-router
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
