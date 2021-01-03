@@ -7,22 +7,22 @@ most performance slowdowns could be attributed to your *application* code.
 wrk -t8 -c100 -d30s http://localhost:3030/user/123
 ```
 
-### srv
+### srv + router
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     7.14ms    2.07ms  66.69ms   97.68%
-    Req/Sec     1.71k   210.52     1.94k    95.79%
-  409428 requests in 30.02s, 61.30MB read
-Requests/sec:  13640.40
-Transfer/sec:      2.04MB
+    Latency     7.71ms    2.59ms  72.35ms   97.53%
+    Req/Sec     1.59k   211.22     1.83k    95.21%
+  380959 requests in 30.02s, 57.04MB read
+Requests/sec:  12692.04
+Transfer/sec:      1.90MB
 
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     6.95ms  500.17us  25.99ms   89.40%
-    Req/Sec     1.74k   100.72     1.94k    88.04%
-  414780 requests in 30.02s, 62.10MB read
-Requests/sec:  13816.79
-Transfer/sec:      2.07MB
+    Latency     7.40ms  493.90us  18.32ms   86.92%
+    Req/Sec     1.63k    89.65     1.82k    88.75%
+  389073 requests in 30.02s, 58.25MB read
+Requests/sec:  12960.48
+Transfer/sec:      1.94MB
 ```
 
 ### polka
