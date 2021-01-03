@@ -4,7 +4,8 @@ Lightweight, Koa-inspired web framework
 
 ## Usage
 
-> **Not published yet**
+> **Not published yet**  
+> However, you can still try by installing `github:intrnl/srv` instead
 
 Uses ES Modules, requires Node v14.13.0+
 
