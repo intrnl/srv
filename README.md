@@ -51,6 +51,32 @@ app.use(({ request, response }) => {
 });
 ```
 
+### Async middlewares
+
+To prevent any lost or unhandled promise rejections when calling the next
+middleware, be sure to either return or await it.
+
+```js
+import { Application } from '@intrnl/srv';
+
+let app = new Application();
+
+app.use(async ({ response }, next) => {
+  try {
+    await next();
+  } catch (err) {
+    response.status = 500;
+    response.body = 'Something happened';
+    console.error(err);
+  }
+});
+
+app.use({ state }, next) => {
+  state.boo = 'Boo!';
+  return next();
+});
+```
+
 ### Routing
 
 ```js
