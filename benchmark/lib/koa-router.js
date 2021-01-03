@@ -2,8 +2,6 @@ import Koa from 'koa';
 import Router from 'koa-router';
 
 
-
-
 function one ({ request }, next) {
 	request.one = true;
 	return next();
