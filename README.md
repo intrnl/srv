@@ -117,5 +117,5 @@ let main = new Router()
   });
 
 let app = new Application()
-  .use(main);
+  .use(main.handler);
 ```
