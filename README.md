@@ -45,7 +45,7 @@ import { json } from '@intrnl/srv/middlewares/body-parser';
 
 let app = new Application();
 
-app.route('POST', rawBody(), json(), ({ request, response }) => {
+app.route('POST', '/', rawBody(), json(), ({ request, response }) => {
   response.body = { type: 'echo', body: request.body };
 });
 ```
