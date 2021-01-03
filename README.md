@@ -85,7 +85,7 @@ import { Application, Router } from '@intrnl/srv';
 let router = new Router();
   .route('GET', '/', ({ response }) => {
     response.body = 'Hello, world!';
-  });
+  })
   .route('GET', '/:id', ({ request, response }) => {
     response.body = `Hello, ${request.params.id}`;
   });
