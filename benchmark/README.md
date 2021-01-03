@@ -11,18 +11,18 @@ wrk -t8 -c100 -d30s http://localhost:3030/user/123
 
 ```
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     7.71ms    2.59ms  72.35ms   97.53%
-    Req/Sec     1.59k   211.22     1.83k    95.21%
-  380959 requests in 30.02s, 57.04MB read
-Requests/sec:  12692.04
-Transfer/sec:      1.90MB
+    Latency     6.66ms    2.11ms  68.76ms   97.63%
+    Req/Sec     1.84k   236.33     2.13k    95.79%
+  439995 requests in 30.02s, 65.88MB read
+Requests/sec:  14658.65
+Transfer/sec:      2.19MB
 
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     7.40ms  493.90us  18.32ms   86.92%
-    Req/Sec     1.63k    89.65     1.82k    88.75%
-  389073 requests in 30.02s, 58.25MB read
-Requests/sec:  12960.48
-Transfer/sec:      1.94MB
+    Latency     6.56ms  449.61us  17.91ms   89.37%
+    Req/Sec     1.84k   101.71     2.06k    85.38%
+  439308 requests in 30.02s, 65.78MB read
+Requests/sec:  14634.24
+Transfer/sec:      2.19MB
 ```
 
 ### polka
