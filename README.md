@@ -71,7 +71,7 @@ app.use(async ({ response }, next) => {
   }
 });
 
-app.use({ state }, next) => {
+app.use(({ state }, next) => {
   state.boo = 'Boo!';
   return next();
 });
