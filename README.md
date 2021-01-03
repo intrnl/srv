@@ -34,3 +34,18 @@ app.route('get', '/', async ({ request, response }) => {
 let server = http.createServer(app.handler);
 server.listen(80);
 ```
+
+### JSON echo
+
+```js
+import * as http from 'http';
+import { Application } from '@intrnl/srv';
+import { rawBody } from '@intrnl/srv/middlewares/raw-body';
+import { json } from '@intrnl/srv/middlewares/body-parser';
+
+let app = new Application();
+
+app.route('POST', rawBody(), json(), ({ request, response }) => {
+  response.body = { type: 'echo', body: request.body };
+});
+```
