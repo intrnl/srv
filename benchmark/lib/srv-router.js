@@ -1,5 +1,5 @@
 import * as http from 'http';
-import { Application } from '@intrnl/srv';
+import { Application, Router } from '@intrnl/srv';
 
 
 function one ({ request }, next) {
@@ -12,10 +12,13 @@ function two ({ request }, next) {
 	return next();
 }
 
-let app = new Application()
-	.mount('/', one, two)
+let router = new Router()
 	.route('GET', '/favicon.ico', () => {})
-	.route('GET', '/', ({ response }) => { response.body = 'Hello' })
+	.route('GET', '/', ({ response }) => { response.body = 'Hello'; })
 	.route('GET', '/user/:id', ({ request, response }) => { response.body = `User: ${request.params.id}` });
+
+let app = new Application()
+	.use(one, two)
+	.use(router.handler);
 
 http.createServer(app.handler).listen(3030);
