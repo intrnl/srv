@@ -38,45 +38,46 @@ export class ResponseHeaders {
 	get (key: string): string | undefined {
 		let value = this._response.getHeader(key);
 		if (value === undefined) return;
-		return Array.isArray(value) ? value.join(', ') : toString(value);
+		return Array.isArray(value) ? value.join('; ') : toString(value);
 	}
 
 	/**
 	 * Set a response header value
 	 */
-	set (key: string, value: string | string[] | number): string {
-		value = Array.isArray(value) ? value.join(', ') : toString(value);
-		this._response.setHeader(key, value);
-		return value;
+	set (key: string, value: string | string[] | number): this {
+		this._response.setHeader(key, Array.isArray(value) ? value.join('; ') : toString(value));
+		return this;
 	}
 
 	/**
 	 * Remove a response header
 	 */
-	remove (key: string): void {
-		return this._response.removeHeader(key);
+	remove (key: string): this {
+		this._response.removeHeader(key);
+		return this;
 	}
 
 	/**
 	 * Removes all response headers
 	 */
-	clear (): void {
-		for (let key of this._response.getHeaderNames()) {
-			this.remove(key);
-		}
+	clear (): this {
+		for (let key of this._response.getHeaderNames()) this.remove(key);
+		return this;
 	}
 
 	/**
 	 * Append a value into a response header
 	 */
-	append (key: string, value: string | number): string {
-		return this.set(key, (this.has(key) ? this.get(key) + ', ' : '') + value);
+	append (key: string, value: string | number): this {
+		this.set(key, (this.has(key) ? this.get(key) + ', ' : '') + value);
+		return this;
 	}
 
 	/**
 	 * Prepend a value into a response header
 	 */
-	prepend (key: string, value: string | number): string {
-		return this.set(key, value + (this.has(key) ? ', ' + this.get(key) : ''));
+	prepend (key: string, value: string | number): this {
+		this.set(key, value + (this.has(key) ? ', ' + this.get(key) : ''));
+		return this;
 	}
 }
