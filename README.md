@@ -31,7 +31,7 @@ http.createServer(app.handler).listen(1234);
 ## Middlewares
 
 An Srv application is essentially a chain of middlewares, they are functions
-that runs in between of receiving the request and responding to it.
+that runs in between of receiving the request and responding to it
 
 ```js
 app.use(({ request }, next) => {
@@ -45,31 +45,25 @@ app.use(({ response }) => {
 });
 ```
 
-**A middleware must return or await when calling the next one**, or else you
-will stop the chain early before the next middleware is able to handle the
-request, causing race conditions and unhandled promise rejections
+As middlewares are asynchronous in nature, **they must return or await when
+trying to call the next one**, or you will stop the chain early before the next
+middleware is able to handle the request, causing race conditions and unhandled
+promise rejections
 
 ```js
 app.use(async (ctx, next) => {
-  // before the next middleware
+  // you await like so
   await next();
-  // after the next middleware
 });
 
 app.use((ctx, next) => {
+  // or you can just return it directly
   return next();
-});
-
-app.use((ctx, next) => { 
-  // before the next middleware
-  return next().then(() => {
-    // after the next middleware
-  });
 });
 ```
 
-The asynchronous nature of chained middlewares makes it possible to snoop on
-the response before it is actually sent
+In return, the nature of middlewares being asynchronous makes it possible for
+them to snoop on responses before it is actually sent out
 
 ```js
 app.use(async ({ response }, next) => {
