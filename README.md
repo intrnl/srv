@@ -1,6 +1,8 @@
 # Srv
 
-Lightweight, Koa-inspired web framework, because worse is better
+Lightweight, Koa-inspired web framework, because [worse is better][1]
+
+[1]: https://en.wikipedia.org/wiki/Worse_is_better
 
 ## Usage
 
