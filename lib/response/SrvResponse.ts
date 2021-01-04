@@ -1,91 +1,86 @@
+import { ok as assert } from 'assert';
 import { STATUS_CODES } from 'http';
 import { Stream } from 'stream';
-import { ok as assert } from 'assert';
-import { ResponseHeaders } from './ResponseHeaders.js';
-import { ResponseError } from './ResponseError.js';
-import { byteLength, EMPTY_STATUS_CODES, isHTML, isInteger } from '../internal/utils.js';
-
-/** @typedef {import('http').ServerResponse} ServerResponse */
-/** @typedef {import('../application/Application').Application} Application */
+import type { ServerResponse } from 'http';
+import { ResponseHeaders } from './ResponseHeaders';
+import { ResponseError } from './ResponseError';
+import { byteLength, EMPTY_STATUS_CODES, HTML_RE, isBuffer, isInteger } from '../internal/utils';
 
 
+/**
+ * Response wrapper
+ */
 export class SrvResponse {
-	/** @type {ServerResponse} */
-	raw;
-	/** @type {ResponseHeaders | undefined} */
-	_headers;
-	/** @type {any} */
-	_body;
-	/** @type {boolean}  */
-	_explicitStatus = false;
-	/** @type {boolean} */
-	_explicitNullBody = false;
+	raw: ServerResponse;
 
-	/**
-	 * Response wrapper
-	 * @param {ServerResponse} response
-	 */
-	constructor (response) {
+	_headers?: ResponseHeaders;
+	_body?: any;
+	_explicitStatus?: boolean;
+	_explicitNullBody?: boolean;
+
+	constructor (response: ServerResponse) {
 		this.raw = response;
 	}
 
 	/**
 	 * Whether or not the response is still writable
 	 */
-	get writable () {
+	get writable (): boolean {
 		return this.raw.writable;
 	}
 
 	/**
 	 * Response status code
 	 */
-	get status () {
+	get status (): number {
 		return this.raw.statusCode;
 	}
 
-	set status (code) {
-		assert(isInteger(code), 'status must be a number');
-		assert(code >= 100 && code <= 999, 'invalid status code');
+	set status (value: number) {
+		assert(isInteger(value), 'status must be a number');
+		assert(value >= 100 && value <= 999, 'invalid status code');
 
 		this._explicitStatus = true;
-		this.raw.statusCode = code;
+		this.raw.statusCode = value;
 	}
 
 	/**
 	 * Response status message
 	 */
-	get message () {
-		return this.raw.statusMessage || STATUS_CODES[this.status];
+	get message (): string {
+		return this.raw.statusMessage || STATUS_CODES[this.status]!;
 	}
 
-	set message (value) {
+	set message (value: string) {
+		assert(typeof value == 'string', 'message must be a string');
+
 		this.raw.statusMessage = value;
 	}
 
 	/**
-	 * Get response headers
+	 * Response headers
 	 */
-	get headers () {
+	get headers (): ResponseHeaders {
 		return this._headers || (this._headers = new ResponseHeaders(this.raw));
 	}
 
 	/**
 	 * Response body
 	 */
-	get body () {
+	get body (): any {
 		return this._body;
 	}
 
-	set body (value) {
+	set body (value: any) {
 		this._body = value;
 		this._explicitNullBody = false;
 
 		if (value == null) {
 			if (EMPTY_STATUS_CODES.has(this.status)) this.status = 204;
 			if (value === null) this._explicitNullBody = true;
-			this.type = null;
-			this.length = null;
 
+			this.type = undefined;
+			this.length = undefined;
 			this.headers.remove('transfer-encoding');
 			return;
 		}
@@ -95,37 +90,38 @@ export class SrvResponse {
 		}
 
 		if (typeof value == 'string') {
-			this.type = isHTML.test(value) ? 'text/html' : 'text/plain';
+			this.type = HTML_RE.test(value) ? 'text/html' : 'text/plain';
 			this.length = byteLength(value);
-		} else if (Buffer.isBuffer(value)) {
+		} else if (isBuffer(value)) {
 			this.type = 'application/octet-stream';
 			this.length = value.length;
 		} else if (value instanceof Stream) {
 			this.type = 'application/octet-stream';
-			this.length = null;
+			this.length = undefined;
 		} else {
 			this.type = 'application/json';
-			this.length = null;
+			this.length = undefined;
 		}
 	}
 
 	/**
 	 * Response Content-Type header
 	 */
-	get type () {
+	get type (): string | undefined {
 		return this.headers.get('content-type');
 	}
 
-	set type (value) {
-		if (value == null) return this.headers.remove('content-type');
-		this.headers.set('content-type', value);
+	set type (value: string | undefined) {
+		if (value == null) this.headers.remove('content-type');
+		else this.headers.set('content-type', value);
 	}
 
 	/**
 	 * Response Content-Length header
 	 */
-	get length () {
+	get length (): number | undefined {
 		if (this.headers.has('content-length')) {
+			// @ts-expect-error
 			return this.headers.get('content-length') | 0;
 		}
 
@@ -135,27 +131,23 @@ export class SrvResponse {
 		return byteLength(typeof body == 'string' ? body : JSON.stringify(body));
 	}
 
-	set length (value) {
-		if (value == null) return this.headers.remove('content-length');
-		this.headers.set('content-length', value);
+	set length (value: number | undefined) {
+		if (value == null) this.headers.remove('content-length');
+		else this.headers.set('content-length', value);
 	}
 
 	/**
 	 * Throws an error with status code and message, exposing the message to
 	 * client if status code is below 500
-	 * @param {number} code
-	 * @param {message} message
-	 * @throws {ResponseError}
 	 */
-	throw (code, message) {
-		throw new ResponseError(code, message);
+	throw (code: number | null | undefined, error: any) {
+		throw new ResponseError(code, error);
 	}
 
 	/**
 	 * Default error handling
-	 * @param {any} error
 	 */
-	onError (error) {
+	onError (error: any) {
 		if (error == null || this.headers.sent) return;
 
 		let headers = error.headers?.[Symbol.iterator]
@@ -166,7 +158,7 @@ export class SrvResponse {
 		for (let [key, value] of headers) this.headers.set(key, value);
 
 		let code = error.status || error.statusCode || 500;
-		let msg = error.expose ? error.message : STATUS_CODES[code];
+		let msg = error.expose ? error.message : STATUS_CODES[code]!;
 
 		this.status = code;
 		this.type = 'text/plain';

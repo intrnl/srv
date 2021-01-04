@@ -3,18 +3,31 @@
 	"name": "@intrnl/srv",
 	"version": "0.1.0",
 	"license": "MIT",
-	"main": "lib/index.js",
+	"main": "dist/index.js",
 	"exports": {
-		".": "./lib/index.js",
-		"./internal/*": "./lib/internal/*.js",
-		"./application/*": "./lib/application/*.js",
-		"./middlewares/*": "./lib/middlewares/*.js",
-		"./request/*": "./lib/request/*.js",
-		"./response/*": "./lib/response/*.js"
+		".": "./dist/index.js",
+		"./internal/*": "./dist/internal/*.js",
+		"./application/*": "./dist/application/*.js",
+		"./middlewares/*": "./dist/middlewares/*.js",
+		"./request/*": "./dist/request/*.js",
+		"./response/*": "./dist/response/*.js"
 	},
 	"files": [
-		"lib/",
+		"dist/",
 		"README.md",
 		"LICENSE"
-	]
+	],
+	"scripts": {
+		"prepare": "pnpm run build",
+		"build": "pnpm run build:lib && pnpm run build:types",
+		"build:lib": "node build.mjs",
+		"build:types": "tsc"
+	},
+	"dependencies": {
+		"@types/node": "^14.14.19"
+	},
+	"devDependencies": {
+		"esbuild": "^0.8.29",
+		"typescript": "^4.1.3"
+	}
 }

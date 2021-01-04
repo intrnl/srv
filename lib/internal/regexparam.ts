@@ -2,20 +2,9 @@
 /// licensed under the MIT license
 /// https://github.com/lukeed/regexparam
 
-/**
- * @typedef {object} RoutePattern
- * @property {string[]} keys
- * @property {RegExp} pattern
- */
-
-/**
- * Converts route patterns into regular expressions
- * @param {string} str
- * @param {boolean} loose
- */
-export function parse (str, loose = false) {
-	let parts = str.split('/');
-	let keys = [];
+export function parse (path: string, loose = false): RoutePattern {
+	let parts = path.split('/');
+	let keys: string[] = [];
 	let pattern = '';
 
 	if (!parts[0]) parts.shift();
@@ -43,4 +32,9 @@ export function parse (str, loose = false) {
 		keys,
 		pattern: new RegExp('^' + pattern + (loose ? '(?=$|\/)' : '\/?$'), 'i'),
 	};
+}
+
+export interface RoutePattern {
+	keys: string[],
+	pattern: RegExp,
 }
