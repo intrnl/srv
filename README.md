@@ -35,7 +35,7 @@ http.createServer(app.handler).listen(1234);
 ```js
 import { Application } from '@intrnl/srv';
 import { rawBody } from '@intrnl/srv/middlewares/raw-body';
-import { json } from '@intrnl/srv/middlewares/body-parser';
+import { json } from '@intrnl/srv/middlewares/parse-body';
 
 let app = new Application();
 
