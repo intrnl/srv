@@ -45,7 +45,11 @@ export class ResponseHeaders {
 	 * Set a response header value
 	 */
 	set (key: string, value: string | string[] | number): this {
-		this._response.setHeader(key, Array.isArray(value) ? value.join('; ') : toString(value));
+		this._response.setHeader(key, Array.isArray(value)
+			? value.join('; ')
+			: toString(value)
+		);
+
 		return this;
 	}
 
@@ -69,15 +73,13 @@ export class ResponseHeaders {
 	 * Append a value into a response header
 	 */
 	append (key: string, value: string | number): this {
-		this.set(key, (this.has(key) ? this.get(key) + ', ' : '') + value);
-		return this;
+		return this.set(key, (this.has(key) ? this.get(key) + ', ' : '') + value);
 	}
 
 	/**
 	 * Prepend a value into a response header
 	 */
 	prepend (key: string, value: string | number): this {
-		this.set(key, value + (this.has(key) ? ', ' + this.get(key) : ''));
-		return this;
+		return this.set(key, value + (this.has(key) ? ', ' + this.get(key) : ''));
 	}
 }
