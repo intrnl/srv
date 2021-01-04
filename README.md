@@ -1,6 +1,6 @@
-# `srv`
+# Srv
 
-Lightweight, Koa-inspired web framework
+Lightweight, Koa-inspired web framework, because worse is better
 
 ## Usage
 
@@ -15,8 +15,6 @@ npm install @intrnl/srv
 # yarn add @intrnl/srv
 ```
 
-### Basic server
-
 ```js
 import * as http from 'http';
 import { Application } from '@intrnl/srv';
@@ -30,92 +28,127 @@ app.use(({ request, response }) => {
 http.createServer(app.handler).listen(1234);
 ```
 
-### JSON echo server
+## Middlewares
+
+An Srv application is essentially a chain of middlewares, they are functions
+that runs in between of receiving the request and responding to it.
 
 ```js
-import { Application } from '@intrnl/srv';
-import { rawBody } from '@intrnl/srv/middlewares/raw-body';
-import { json } from '@intrnl/srv/middlewares/parse-body';
+app.use(({ request }, next) => {
+  console.log(`-> Received ${request.method} on ${request.url.path}`);
+  return next(); // move on to the next middleware
+});
 
-let app = new Application();
-
-app.use(rawBody(), json());
-
-app.use(({ request, response }) => {
-  if (request.method == 'POST') {
-    response.body = { type: 'echo', body: request.body };
-  } else {
-    response.status = 405;
-    response.headers.append('allow', 'post');
-  }
+app.use(({ response }) => {
+  response.body = 'Hello world!';
+  // we're not calling the next handler, so the chain will stop here
 });
 ```
 
-### Async middlewares
-
-To prevent any lost or unhandled promise rejections when calling the next
-middleware, be sure to either return or await it.
+**A middleware must return or await when calling the next one**, or else you
+will stop the chain early before the next middleware is able to handle the
+request, causing race conditions and unhandled promise rejections
 
 ```js
-import { Application } from '@intrnl/srv';
-
-let app = new Application();
-
-app.use(async ({ response }, next) => {
-  try {
-    await next();
-  } catch (err) {
-    response.status = 500;
-    response.body = 'Something happened';
-    console.error(err);
-  }
+app.use(async (ctx, next) => {
+  // before the next middleware
+  await next();
+  // after the next middleware
 });
 
-app.use(({ state }, next) => {
-  state.boo = 'Boo!';
+app.use((ctx, next) => {
+  return next();
+});
+
+app.use((ctx, next) => { 
+  // before the next middleware
+  return next().then(() => {
+    // after the next middleware
+  });
+});
+```
+
+The asynchronous nature of chained middlewares makes it possible to snoop on
+the response before it is actually sent
+
+```js
+app.use(async ({ response }, next) => {
+  await next();
+
+  // ooh, so we're sending greetings!
+  console.log(response.body);
+});
+
+app.use(({ response }) => {
+  response.body = 'Greetings!';
+});
+```
+
+## Routing
+
+A router is provided out of the box for running middlewares based on HTTP
+methods and endpoints
+
+```js
+import { Application, Router } from '@intrnl/srv';
+
+let app = new Application();
+let router = new Router();
+
+router.route('GET', '/', ({ response }) => {
+  response.body = 'Hello!';
+});
+
+app.use(router.handler);
+```
+
+Commonly used patterns for route matching is supported
+
+- static: `/` `/users` `/users/all`
+- parameters: `/users/:id` `/users/:id/books/:title`
+- optional parameters: `/books/:genre?/:type?`
+- suffix parameters: `/movies/:title.mp4` `/movies/:title.(mp4|webm)`
+- wildcards: `/movies/*`
+
+```js
+router.route('GET', '/users/:id', ({ request, response }) => {
+  response.body = `Hello, ${request.params.id}!`;
+});
+```
+
+You can have middlewares that runs on a specific endpoint prefix, it is
+recommended that you add them first before adding any specific routes
+
+```js
+router.mount('/user', (ctx, next) => {
+  // this will run on on every request that starts with /user/
   return next();
 });
 ```
 
-### Routing
+Mounting another router is supported, allowing for subrouting
 
 ```js
-import { Application, Router } from '@intrnl/srv';
+let app = new Application();
+let forum = new Router();
+let main = new Router();
 
-let router = new Router();
-  .route('GET', '/', ({ response }) => {
-    response.body = 'Hello, world!';
-  })
-  .route('GET', '/:id', ({ request, response }) => {
-    response.body = `Hello, ${request.params.id}`;
-  });
+forum.route('GET', '/', ({ response }) => {
+  response.body = 'Welcome to the forum!';
+});
 
-let app = new Application()
-  .use(router.handler);
+main.mount('/forum', forum.handler);
+
+main.route('GET', '/', ({ response }) => {
+  response.body = 'Welcome to the main page!';
+});
+
+app.use(main.handler);
 ```
 
-### Nested/Subrouting
+## Builtin goodies
 
-It is recommended that you mount nested routers first before adding any
-additional routes
+Srv currently provides these middlewares out of the box
 
-```js
-import { Application, Router } from '@intrnl/srv';
-
-let forum = new Router()
-  .route('GET', '/', ({ response }) => {
-    response.body = 'Welcome to forum!';
-  })
-  .route('GET', '/:id', ({ request, response }) => {
-    response.body = `Welcome to ${request.params.id} board!`;
-  });
-
-let main = new Router()
-  .mount('/forum', forum.handler)
-  .route('GET', '/', ({ response }) => {
-    response.body = 'Hello, world!';
-  });
-
-let app = new Application()
-  .use(main.handler);
-```
+- Raw request body (`@intrnl/srv/middlewares/raw-body`)
+- Body parser (`@intrnl/srv/middlewares/parse-body`)
