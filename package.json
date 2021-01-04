@@ -23,10 +23,8 @@
 		"build:lib": "node build.mjs",
 		"build:types": "tsc"
 	},
-	"dependencies": {
-		"@types/node": "^14.14.19"
-	},
 	"devDependencies": {
+		"@types/node": "^14.14.19",
 		"esbuild": "^0.8.29",
 		"typescript": "^4.1.3"
 	}
