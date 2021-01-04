@@ -22,45 +22,47 @@ export class RequestHeaders {
 	get (key: string): string | undefined {
 		let value = this._headers[key.toLowerCase()];
 		if (value == undefined) return;
-		return Array.isArray(value) ? value.join(', ') : toString(value);
+		return Array.isArray(value) ? value.join('; ') : toString(value);
 	}
 
 	/**
 	 * Set a request header value
 	 */
-	set (key: string, value: string | string[] | number): string {
-		return this._headers[key.toLowerCase()] = Array.isArray(value)
-			? value.join(', ')
+	set (key: string, value: string | string[] | number): this {
+		this._headers[key.toLowerCase()] = Array.isArray(value)
+			? value.join('; ')
 			: toString(value);
+
+		return this;
 	}
 
 	/**
 	 * Remove a request header
 	 */
-	remove (key: string): void {
+	remove (key: string): this {
 		delete this._headers[key.toLowerCase()];
+		return this;
 	}
 
 	/**
 	 * Removes all request headers
 	 */
-	clear (): void {
-		for (let key in this._headers) {
-			this.remove(key);
-		}
+	clear (): this {
+		for (let key in this._headers) this.remove(key);
+		return this;
 	}
 
 	/**
 	 * Appends a value into a request header
 	 */
-	append (key: string, value: string | number): string {
+	append (key: string, value: string | number): this {
 		return this.set(key, (this.has(key) ? this.get(key) + ', ' : '') + value);
 	}
 
 	/**
 	 * Prepends a value into a request header
 	 */
-	prepend (key: string, value: string | number): string {
+	prepend (key: string, value: string | number): this {
 		return this.set(key, value + (this.has(key) ? ', ' + this.get(key) : ''));
 	}
 }
