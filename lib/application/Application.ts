@@ -51,7 +51,7 @@ export class Application {
 }
 
 function respond (context: Context): void {
-	let { request, response, respond = true } = context;
+	let { request, response, respond } = context;
 	if (respond === false || !response.writable) return;
 
 	let { method } = request;
