@@ -4,10 +4,9 @@ A lightweight HTTP web framework.
 
 ## Usage
 
-> **Not published yet**  
-> However, you can still try by installing `github:intrnl/srv` instead
-
 Uses ES Modules, requires Node v14.13.0+
+
+**For TypeScript users**: Be sure to install `@types/node` for Node.js typings
 
 ```sh
 npm install @intrnl/srv

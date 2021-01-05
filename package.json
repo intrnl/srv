@@ -1,8 +1,13 @@
 {
 	"type": "module",
 	"name": "@intrnl/srv",
+	"description": "A lightweight HTTP web framework.",
 	"version": "0.1.0",
 	"license": "MIT",
+	"author": "intrnl",
+	"repository": {
+		"url": "https://github.com/intrnl/srv"
+	},
 	"main": "dist/index.js",
 	"exports": {
 		".": "./dist/index.js",
