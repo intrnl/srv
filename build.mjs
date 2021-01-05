@@ -28,7 +28,7 @@ let IMPORT_RE = /(import|export)(.*)(['"])(\.{0,2}\/.*(?<!\.js))\3/g;
 let start = Date.now();
 let entries = await recurs('lib/', (file) => file.endsWith('.ts'));
 
-await fs.rm('dist', { recursive: true, force: true });
+await fs.rm('dist/', { recursive: true, force: true });
 
 let { warnings, outputFiles } = await esbuild.build({
 	entryPoints: entries,
