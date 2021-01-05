@@ -2,7 +2,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"@intrnl/srv": "workspace:^0.1.0",
+		"@intrnl/srv": "workspace:^0.2.0",
 		"@intrnl/srv-router": "workspace:^0.1.0",
 		"express": "^4.17.1",
 		"koa": "^2.13.0",

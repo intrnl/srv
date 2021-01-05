@@ -21,9 +21,9 @@
 		"build:types": "tsc"
 	},
 	"peerDependencies": {
-		"@intrnl/srv": "workspace:^0.1.0"
+		"@intrnl/srv": "workspace:^0.2.0"
 	},
 	"devDependencies": {
-		"@intrnl/srv": "workspace:^0.1.0"
+		"@intrnl/srv": "workspace:^0.2.0"
 	}
 }
