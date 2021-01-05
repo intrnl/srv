@@ -1,56 +1,64 @@
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import esbuild from 'esbuild';
 
 
-async function recurse (dirname, callback, prefix = dirname) {
+async function recurs (dirname, callback, prefix = dirname) {
 	dirname = path.resolve('.', dirname);
 
-	await fs.readdir(dirname)
-		.then((listing) => Promise.all(
-			listing.map((item) => {
-				let absolute = path.join(dirname, item);
+	let listing = await fs.readdir(dirname, { withFileTypes: true });
+	let items = [];
 
-				return fs.stat(absolute).then((stat) => (
-					stat.isDirectory()
-						? recurse(absolute, callback, path.join(prefix, item))
-						: callback(path.join(prefix, item), absolute, stat)
-				));
-			})
-		));
+	for (let file of listing) {
+		let relative = path.join(prefix, file.name);
+		let absolute = path.join(dirname, file.name);
+
+		if (file.isDirectory()) {
+			items.push(...await recurs(absolute, callback, relative));
+		} else {
+			if (await callback(relative, absolute, file)) items.push(relative);
+		}
+	}
+
+	return items;
 }
 
-let start = Date.now();
-let entryPoints = [];
 let IMPORT_RE = /(import|export)(.*)(['"])(\.{0,2}\/.*(?<!\.js))\3/g;
 
-// Remove dist directory beforehand
-await fs.rm('dist/', { recursive: true, force: true });
+let start = Date.now();
+let entries = await recurs('lib/', (file) => file.endsWith('.ts'));
 
-// Collect the files
-await recurse('lib/', (file) => {
-	if (file.endsWith('.ts')) entryPoints.push(file);
+await fs.rm('dist', {
+	recursive: true,
+	force: true,
 });
 
-// Build!
-await esbuild.build({
-	entryPoints,
-	target: 'es2020',
-	format: 'esm',
+let { warnings, outputFiles } = await esbuild.build({
+	entryPoints: entries,
 	outdir: 'dist/',
+	format: 'esm',
+	target: 'es2020',
+	write: false,
 });
 
-// Rewrite imports
-await recurse('dist/', async (file) => {
-	if (!file.endsWith('.js')) return;
+for (let warning of warnings) {
+	console.warn(`warn: ${warning.text}`);
+}
 
-	let source = await fs.readFile(file, 'utf-8');
-	let modified = source.replace(IMPORT_RE, (f, type, imports, quote, path) => {
-		return `${type}${imports}${quote}${path}.js${quote}`;
-	});
+for (let file of outputFiles) {
+	let source = file.text;
+	let filename = file.path;
+	let dirname = path.dirname(filename);
 
-	if (modified != source) await fs.writeFile(file, modified);
-});
+	if (filename.endsWith('.js')) {
+		source = source.replace(IMPORT_RE, (f, type, imports, quote, path) => (
+			`${type}${imports}${quote}${path}.js${quote}`
+		));
+	}
+
+	await fs.mkdir(dirname, { recursive: true });
+	await fs.writeFile(filename, source);
+}
 
 let end = Date.now();
 console.log(`Build took ${end - start} ms`);
