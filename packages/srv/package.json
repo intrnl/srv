@@ -6,7 +6,8 @@
 	"license": "MIT",
 	"author": "intrnl",
 	"repository": {
-		"url": "https://github.com/intrnl/srv"
+		"url": "https://github.com/intrnl/srv",
+		"directory": "packages/srv"
 	},
 	"main": "dist/index.js",
 	"exports": {
