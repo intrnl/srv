@@ -1,5 +1,6 @@
 import * as http from 'http';
-import { Application, Router } from '@intrnl/srv';
+import { Application } from '@intrnl/srv';
+import { Router } from '@intrnl/srv-router';
 
 
 function one ({ request }, next) {
