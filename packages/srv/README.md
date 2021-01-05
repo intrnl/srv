@@ -74,21 +74,27 @@ app.use(async (ctx, next) => {
 
 The point of Srv isn't about being fast. While it is faster than Koa and
 especially Express by any stretch, it's also about being lightweight while
-still being able to provide a lot out of the box.
+still being able to provide a lot out of the box
 
 Srv doesn't come with any dependencies, see how it stacks up with commonly used
-frameworks along with their middlewares:
+frameworks
 
-- srv@0.1.0: [29.7 KB installed](https://packagephobia.com/result?p=@intrnl/srv@0.1.0)
+- srv@0.2.0: [22.1 KB installed](https://packagephobia.com/result?p=@intrnl/srv@0.2.0)
 - connect@3.7.0: [236 KB installed](https://packagephobia.com/result?p=connect@3.7.0)
 - express@4.17.1: [1.61 MB installed](https://packagephobia.com/result?p=express@4.17.1)
 - koa@2.13.1: [908 KB installed](https://packagephobia.com/result?p=koa@2.13.1)
 - fastify@3.9.2: [4.48 MB installed](https://packagephobia.com/result?p=fastify@3.9.2)
+
+Here's the comparison for middlewares
+
+- srv-router@0.1.0: [7.71 KB installed](https://packagephobia.com/result?p=@intrnl/srv-router@0.1.0)
 - router@1.3.5: [153 KB installed](https://packagephobia.com/result?p=router@1.3.5)
 - koa-router@10.0.0: [281 KB installed](https://packagephobia.com/result?p=koa-router@10.0.0)
+- srv-body-raw@0.1.0: [3.98 KB installed](https://packagephobia.com/result?p=@intrnl/srv-body-raw@0.1.0)
+- srv-body-parse: [3.74 KB installed](https://packagephobia.com/result?p=@intrnl/srv-body-parse@0.1.0)
 - body-parser@1.19.0: [0.979 MB installed](https://packagephobia.com/result?p=body-parser@1.19.0)
 
 There are even lighter ones, and potentially even faster than Srv too, with
 little to no abstractions between the app and Node.js underlying HTTP server.
 But personally I think that Srv can serve as a lesson on how it would be if the
-underlying server was made today, and not years ago.
+underlying server was made today, and not years ago
