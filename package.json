@@ -1,33 +1,5 @@
 {
-	"type": "module",
-	"name": "@intrnl/srv",
-	"description": "A lightweight HTTP web framework.",
-	"version": "0.1.0",
-	"license": "MIT",
-	"author": "intrnl",
-	"repository": {
-		"url": "https://github.com/intrnl/srv"
-	},
-	"main": "dist/index.js",
-	"exports": {
-		".": "./dist/index.js",
-		"./internal/*": "./dist/internal/*.js",
-		"./application/*": "./dist/application/*.js",
-		"./middlewares/*": "./dist/middlewares/*.js",
-		"./request/*": "./dist/request/*.js",
-		"./response/*": "./dist/response/*.js"
-	},
-	"files": [
-		"dist/",
-		"README.md",
-		"LICENSE"
-	],
-	"scripts": {
-		"prepare": "pnpm run build",
-		"build": "pnpm run build:lib && pnpm run build:types",
-		"build:lib": "node build.mjs",
-		"build:types": "tsc"
-	},
+	"private": true,
 	"devDependencies": {
 		"@types/node": "^14.14.19",
 		"esbuild": "^0.8.29",

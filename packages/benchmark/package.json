@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"dependencies": {
-		"@intrnl/srv": "link:../",
+		"@intrnl/srv": "workspace:^0.1.0",
 		"express": "^4.17.1",
 		"koa": "^2.13.0",
 		"koa-router": "^10.0.0",
