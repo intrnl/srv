@@ -1,13 +1,13 @@
 {
 	"type": "module",
-	"name": "@intrnl/srv-body-prase",
+	"name": "@intrnl/srv-body-parse",
 	"description": "Parsed request body middleware for Srv",
 	"version": "0.1.0",
 	"license": "MIT",
 	"author": "intrnl",
 	"repository": {
 		"url": "https://github.com/intrnl/srv",
-		"directory": "packages/srv-body-prase"
+		"directory": "packages/srv-body-parse"
 	},
 	"main": "dist/index.js",
 	"files": [
