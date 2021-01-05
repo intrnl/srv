@@ -140,8 +140,15 @@ export class SrvResponse {
 	 * Throws an error with status code and message, exposing the message to
 	 * client if status code is below 500
 	 */
-	throw (code: number | null | undefined, error: any) {
+	throw (code: number | null | undefined, error: any): boolean {
 		throw new ResponseError(code, error);
+	}
+
+	/**
+	 * Like .throw, but with an added guard
+	 */
+	assert (value: any, code: number, error: any): boolean {
+		if (!value) throw new ResponseError(code, error);
 	}
 
 	/**
