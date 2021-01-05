@@ -1,8 +1,8 @@
 import { ok as assert } from 'assert';
-import { parse } from '../internal/regexparam';
-import { compose } from '../internal/compose-middlewares';
-import { lead } from '../internal/utils';
-import type { NextHandler } from './Application';
+import { compose } from '@intrnl/srv';
+import type { NextHandler } from '@intrnl/srv';
+
+import { parse } from './regexparam';
 
 
 export class Router {
@@ -83,4 +83,8 @@ export class Router {
 		this.middlewares.push(handler);
 		return this;
 	}
+}
+
+function lead (path: string) {
+	return path[0] == '/' ? path : '/' + path;
 }

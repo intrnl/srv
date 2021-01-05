@@ -1,23 +1,15 @@
 {
 	"type": "module",
-	"name": "@intrnl/srv",
-	"description": "A lightweight HTTP web framework.",
+	"name": "@intrnl/srv-router",
+	"description": "Router middleware for Srv",
 	"version": "0.1.0",
 	"license": "MIT",
 	"author": "intrnl",
 	"repository": {
 		"url": "https://github.com/intrnl/srv",
-		"directory": "packages/srv"
+		"directory": "packages/srv-router"
 	},
 	"main": "dist/index.js",
-	"exports": {
-		".": "./dist/index.js",
-		"./application": "./dist/application.js",
-		"./compose": "./dist/compose.js",
-		"./internal/*": "./dist/internal/*.js",
-		"./request/*": "./dist/request/*.js",
-		"./response/*": "./dist/response/*.js"
-	},
 	"files": [
 		"dist/",
 		"README.md"
@@ -27,5 +19,11 @@
 		"build": "pnpm run build:lib && pnpm run build:types",
 		"build:lib": "node ../../build.mjs",
 		"build:types": "tsc"
+	},
+	"peerDependencies": {
+		"@intrnl/srv": "workspace:^0.1.0"
+	},
+	"devDependencies": {
+		"@intrnl/srv": "workspace:^0.1.0"
 	}
 }

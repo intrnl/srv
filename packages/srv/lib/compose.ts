@@ -1,4 +1,4 @@
-import type { Dispatcher, NextHandler } from '../application/Application';
+import type { Dispatcher, NextHandler } from './application';
 
 
 export function compose (handlers: NextHandler[]): Dispatcher {

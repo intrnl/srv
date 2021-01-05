@@ -1,11 +1,11 @@
 import { ok as assert } from 'assert';
 import { Stream } from 'stream';
 import type { IncomingMessage, ServerResponse } from 'http';
-import { Promisable } from '../internal/types';
-import { compose } from '../internal/compose-middlewares';
-import { SrvRequest } from '../request/SrvRequest';
-import { SrvResponse } from '../response/SrvResponse';
-import { byteLength, EMPTY_STATUS_CODES, isInteger } from '../internal/utils';
+import { Promisable } from './internal/types';
+import { compose } from './compose';
+import { SrvRequest } from './request/SrvRequest';
+import { SrvResponse } from './response/SrvResponse';
+import { byteLength, EMPTY_STATUS_CODES, isInteger } from './internal/utils';
 
 
 export class Application {

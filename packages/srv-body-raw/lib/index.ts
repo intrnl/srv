@@ -1,6 +1,6 @@
 import * as zlib from 'zlib';
 import { Stream } from 'stream';
-import type { NextHandler } from '../application/Application';
+import type { NextHandler } from '@intrnl/srv';
 
 
 export function rawBody (): NextHandler {

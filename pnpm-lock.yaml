@@ -21,6 +21,25 @@ importers:
       koa: ^2.13.0
       koa-router: ^10.0.0
       polka: ^0.5.2
+  packages/srv:
+    specifiers: {}
+  packages/srv-body-parse:
+    devDependencies:
+      '@intrnl/srv': 'link:../srv'
+      '@intrnl/srv-body-raw': 'link:../srv-body-raw'
+    specifiers:
+      '@intrnl/srv': 'workspace:^0.1.0'
+      '@intrnl/srv-body-raw': 'workspace:^0.1.0'
+  packages/srv-body-raw:
+    devDependencies:
+      '@intrnl/srv': 'link:../srv'
+    specifiers:
+      '@intrnl/srv': 'workspace:^0.1.0'
+  packages/srv-router:
+    devDependencies:
+      '@intrnl/srv': 'link:../srv'
+    specifiers:
+      '@intrnl/srv': 'workspace:^0.1.0'
 lockfileVersion: 5.2
 packages:
   /@arr/every/1.0.1:

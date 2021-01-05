@@ -1,3 +1,6 @@
 packages:
   - packages/benchmark
   - packages/srv
+  - packages/srv-body-parse
+  - packages/srv-body-raw
+  - packages/srv-router
