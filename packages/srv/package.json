@@ -9,6 +9,9 @@
 		"url": "https://github.com/intrnl/srv",
 		"directory": "packages/srv"
 	},
+	"engines": {
+		"node": ">=14.13.0"
+	},
 	"main": "dist/index.js",
 	"exports": {
 		".": "./dist/index.js",
