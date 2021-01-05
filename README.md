@@ -145,10 +145,10 @@ The point of Srv isn't about being fast. While it is faster than Koa and
 especially Express by any stretch, it's also about being lightweight while
 still being able to provide a lot out of the box.
 
-Srv doesn't come with any dependencies, and only weighs about 30 KB while
-also providing its own set of middlewares, see how it stacks up to the commonly
-used ones below:
+Srv doesn't come with any dependencies, see how it stacks up with commonly used
+frameworks along with their middlewares:
 
+- srv@0.1.0: [29.7 KB installed](https://packagephobia.com/result?p=@intrnl/srv@0.1.0)
 - connect@3.7.0: [236 KB installed](https://packagephobia.com/result?p=connect@3.7.0)
 - express@4.17.1: [1.61 MB installed](https://packagephobia.com/result?p=express@4.17.1)
 - koa@2.13.1: [908 KB installed](https://packagephobia.com/result?p=koa@2.13.1)
