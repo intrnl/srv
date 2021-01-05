@@ -30,51 +30,44 @@ http.createServer(app.handler).listen(1234);
 
 ## Middlewares
 
-An Srv application is essentially a chain of middlewares, they are functions
-that runs in between of receiving the request and responding to it
+An Srv application is essentially a chain of middlewares; like a middleman, they
+are functions that runs in between receiving and responding to a request, and
+they can run code before and after the next one
 
 ```js
+// Logger
 app.use(({ request }, next) => {
   console.log(`-> Received ${request.method} on ${request.url.path}`);
-  return next(); // move on to the next middleware
-});
-
-app.use(({ response }) => {
-  response.body = 'Hello world!';
-  // we're not calling the next handler, so the chain will stop here
-});
-```
-
-As middlewares are asynchronous in nature, **they must return or await when
-trying to call the next one**, or you will stop the chain early before the next
-middleware is able to handle the request, causing race conditions and unhandled
-promise rejections
-
-```js
-app.use(async (ctx, next) => {
-  // you await like so
-  await next();
-});
-
-app.use((ctx, next) => {
-  // or you can just return it directly
   return next();
 });
-```
 
-In return, the nature of middlewares being asynchronous makes it possible for
-them to snoop on responses before it is actually sent out
-
-```js
+// Response time
 app.use(async ({ response }, next) => {
+  let start = Date.now();
   await next();
-
-  // ooh, so we're sending greetings!
-  console.log(response.body);
+  let end = Date.now();
+  response.headers.set('x-response-time', end - start);
 });
 
+// Response
 app.use(({ response }) => {
-  response.body = 'Greetings!';
+  response.body = 'Hello, world!';
+});
+```
+
+**Middlewares must return or await when trying to call the next one**, or you
+will stop the chain early before the next middleware is able to handle the
+request, causing race conditions and unhandled promise rejections
+
+```js
+app.use((ctx, next) => {
+  // you return it like so
+  return next();
+});
+
+app.use(async (ctx, next) => {
+  // or await, if you need to run something after the next middleware
+  await next();
 });
 ```
 
