@@ -43,8 +43,7 @@ for (let warning of warnings) {
 }
 
 for (let file of outputFiles) {
-	let source = file.text;
-	let filename = file.path;
+	let { text: source, path: filename } = file;
 	let dirname = path.dirname(filename);
 
 	if (filename.endsWith('.js')) {
