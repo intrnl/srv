@@ -48,9 +48,7 @@ for (let file of outputFiles) {
 	let dirname = path.dirname(filename);
 
 	if (filename.endsWith('.js')) {
-		source = source.replace(IMPORT_RE, (f, type, imports, quote, path) => (
-			`${type}${imports}${quote}${path}.js${quote}`
-		));
+		source = source.replace(IMPORT_RE, '$1$2$3$4.js$3');
 	}
 
 	await fs.mkdir(dirname, { recursive: true });
