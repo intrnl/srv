@@ -1,83 +1,78 @@
 import { ok as assert } from 'assert';
 import { compose } from '@intrnl/srv';
-import type { NextHandler } from '@intrnl/srv';
+import { compile } from '@intrnl/path-builder';
 
-import { parse } from './regexparam';
+import type { NextHandler } from '@intrnl/srv';
 
 
 export class Router {
 	middlewares: NextHandler[] = [];
 	handler = compose(this.middlewares);
 
-	/**
-	 * Mounts a middleware, this is the same as passing false on the method
-	 * parameter of the route method
-	 */
 	mount (path: string, ...handlers: NextHandler[]): this {
-		return this.route(false, path, ...handlers);
-	}
-
-	/**
-	 * Adds a route
-	 */
-	route (method: false | string, path: string, ...handlers: NextHandler[]): this {
-		assert((method && typeof method == 'string') || method == false, 'method must be either false or a string');
-		assert(path && typeof path == 'string', 'path must be a string');
+		assert(typeof path == 'string', 'path must be a string');
 		assert(handlers.every((h) => typeof h == 'function'), 'handler must be a function');
 
-		if (typeof method == 'string') method = method.toUpperCase();
-		path = lead(path);
+		path = normalize(path);
 
-		let len = path.length;
-		let global = !method;
-		let isHEAD = method == 'HEAD';
-
-		let { keys, pattern } = parse(path, global);
+		let pattern = compile(path, true);
 		let dispatch = compose(handlers);
 
 		let handler: NextHandler = (context, next) => {
 			let { request } = context;
 
-			if (!method || method == request.method || (isHEAD && request.method == 'GET')) {
-				let nextParams: Record<string, string> = {};
+			let match = pattern.exec(request.url.path);
+			if (!match) return next();
 
-				if (keys.length) {
-					let matches = pattern.exec(request.url.path);
-					if (!matches) return next();
+			let prevHref = request.url.href;
+			let prevPath = request.url.path;
+			let prevParams = request.params;
 
-					for (let i = 0; i < keys.length; i++) {
-						nextParams[keys[i]] = matches[i + 1];
-					}
-				} else if (!pattern.test(request.url.path)) {
-					return next();
-				}
+			request.url.href = '/' + request.url.search;
+			request.url.path = '/';
+			request.params = match.groups || {};
 
-				if (global) {
-					let prevHref = request.url.href;
-					let prevPath = request.url.path;
-					let prevParams = request.params;
+			return dispatch(context)
+				.finally(() => {
+					request.url.href = prevHref;
+					request.url.path = prevPath;
+					request.params = prevParams;
+				})
+				.then(next);
+		};
 
-					let nextHref = prevHref.slice(len) || '/';
-					let nextPath = prevHref.slice(len) || '/';
+		this.middlewares.push(handler);
+		return this;
+	}
 
-					request.params = nextParams;
-					request.url.href = nextHref;
-					request.url.path = nextPath;
+	route (method: string, path: string, ...handlers: NextHandler[]): this {
+		assert(typeof path == 'string', 'path must be a string');
+		assert(handlers.every((h) => typeof h == 'function'), 'handler must be a function');
 
-					return dispatch(context)
-						.finally(() => {
-							request.params = prevParams;
-							request.url.href = prevHref;
-							request.url.path = prevPath;
-						})
-						.then(next);
-				} else {
-					request.params = nextParams;
-					return dispatch(context, next);
-				}
-			}
+		method = method.toUpperCase();
+		path = normalize(path);
 
-			return next();
+		let isHEAD = method == 'HEAD';
+
+		let pattern = compile(path);
+		let dispatch = compose(handlers);
+
+		let handler: NextHandler = (context, next) => {
+			let { request } = context;
+
+			if (!(method == request.method || (isHEAD && request.method == 'GET'))) return next();
+
+			let match = pattern.exec(path);
+			if (!match) return next();
+
+			let prevParams = request.params;
+			request.params = match.groups || {};
+
+			return dispatch(context)
+				.finally(() => {
+					request.params = prevParams
+				})
+				.then(next);
 		};
 
 		this.middlewares.push(handler);
@@ -85,6 +80,6 @@ export class Router {
 	}
 }
 
-function lead (path: string) {
-	return path[0] == '/' ? path : '/' + path;
+function normalize (path: string) {
+	return (path[0] != '/' ? '/' + path : path).replace(/\/$/, '');
 }
