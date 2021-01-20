@@ -24,13 +24,9 @@ router.route('GET', '/', ({ response }) => {
 app.use(router.handler);
 ```
 
-Commonly used patterns for route matching is supported
+## Routing
 
-- static: `/` `/users` `/users/all`
-- parameters: `/users/:id` `/users/:id/books/:title`
-- optional parameters: `/books/:genre?/:type?`
-- suffix parameters: `/movies/:title.mp4` `/movies/:title.(mp4|webm)`
-- wildcards: `/movies/*`
+Commonly used patterns for path matching is supported
 
 ```js
 router.route('GET', '/users/:id', ({ request, response }) => {
@@ -38,8 +34,12 @@ router.route('GET', '/users/:id', ({ request, response }) => {
 });
 ```
 
+## Mounting
+
 You can have middlewares that runs on a specific endpoint prefix, it is
 recommended that you add them first before adding any specific routes
+
+Patterns are not supported, it will be ignored and be treated as regular path.
 
 ```js
 router.mount('/user', (ctx, next) => {
