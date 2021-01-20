@@ -21,12 +21,12 @@ export class Router {
 		let handler: NextHandler = async (context, next) => {
 			let { request } = context;
 
-			if (!request.url.path.startsWith(path)) return next();
-
 			let prevPath = request.url.path;
 			let prevHref = request.url.href;
 
-			let nextPath = request.url.path.slice(length);
+			if (!(prevPath == path || prevPath.startsWith(path + '/'))) return next();
+
+			let nextPath = prevPath.slice(length) || '/';
 			let nextHref = nextPath + request.url.search;
 
 			request.url.path = nextPath;
