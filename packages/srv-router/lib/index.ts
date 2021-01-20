@@ -16,7 +16,6 @@ export class Router {
 		path = normalize(path);
 
 		let length = path.length;
-		let trailing = path[length - 1] == '/' ? -1 : 0;
 		let dispatch = compose(handlers);
 
 		let handler: NextHandler = async (context, next) => {
@@ -27,7 +26,7 @@ export class Router {
 			let prevPath = request.url.path;
 			let prevHref = request.url.href;
 
-			let nextPath = request.url.path.slice(length + trailing) || '/';
+			let nextPath = request.url.path.slice(length);
 			let nextHref = nextPath + request.url.search;
 
 			request.url.path = nextPath;
