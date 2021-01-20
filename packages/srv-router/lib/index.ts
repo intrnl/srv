@@ -69,7 +69,7 @@ export class Router {
 				(isHEAD && request.method == 'GET')
 			)) return next();
 
-			let match = pattern.exec(path);
+			let match = pattern.exec(request.url.path);
 			if (!match) return next();
 
 			let prevParams = request.params;
