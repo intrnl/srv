@@ -24,7 +24,7 @@ export class Router {
 			let prevPath = request.url.path;
 			let prevHref = request.url.href;
 
-			if (!(prevPath == path || prevPath.startsWith(path + '/'))) return next();
+			if (prevPath != path && !prevPath.startsWith(path + '/')) return next();
 
 			let nextPath = prevPath.slice(length) || '/';
 			let nextHref = nextPath + request.url.search;
