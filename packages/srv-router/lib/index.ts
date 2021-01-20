@@ -29,19 +29,25 @@ export class Router {
 			let nextPath = prevPath.slice(length) || '/';
 			let nextHref = nextPath + request.url.search;
 
-			request.url.path = nextPath;
-			request.url.href = nextHref;
-
-			await dispatch(context, async () => {
-				request.url.path = prevPath;
-				request.url.href = prevHref;
-				await next();
+			try {
 				request.url.path = nextPath;
 				request.url.href = nextHref;
-			});
 
-			request.url.path = prevPath;
-			request.url.href = prevHref;
+				await dispatch(context, async () => {
+					request.url.path = prevPath;
+					request.url.href = prevHref;
+
+					try {
+						await next();
+					} finally {
+						request.url.path = nextPath;
+						request.url.href = nextHref;
+					}
+				});
+			} finally {
+				request.url.path = prevPath;
+				request.url.href = prevHref;
+			}
 		};
 
 		this.middlewares.push(handler);
@@ -75,15 +81,21 @@ export class Router {
 			let prevParams = request.params;
 			let nextParams = match.groups || {};
 
-			request.params = nextParams;
-
-			await dispatch(context, async () => {
-				request.params = prevParams;
-				await next();
+			try {
 				request.params = nextParams;
-			});
 
-			request.params = prevParams;
+				await dispatch(context, async () => {
+					request.params = prevParams;
+
+					try {
+						await next();
+					} finally {
+						request.params = nextParams;
+					}
+				});
+			} finally {
+				request.params = prevParams;
+			}
 		};
 
 		this.middlewares.push(handler);
