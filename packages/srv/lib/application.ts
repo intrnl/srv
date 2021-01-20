@@ -13,6 +13,7 @@ export class Application {
 	dispatcher = compose(this.middlewares);
 
 	handler = (req: IncomingMessage, res: ServerResponse) => {
+		res.statusCode = 404;
 		let context = this.createContext(req, res);
 		return this.handleResponse(context, this.dispatcher);
 	};
