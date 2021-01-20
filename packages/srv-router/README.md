@@ -37,7 +37,7 @@ router.route('GET', '/users/:id', ({ request, response }) => {
 ## Mounting
 
 You can have middlewares that runs on a specific endpoint prefix, it is
-recommended that you add them first before adding any specific routes
+recommended that you add them last before adding any specific routes
 
 Patterns are not supported, it will be ignored and be treated as regular path.
 
