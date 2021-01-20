@@ -15,41 +15,46 @@ export class Router {
 
 		path = normalize(path);
 
-		let pattern = compile(path, true);
+		let length = path.length;
+		let trailing = path[length - 1] == '/' ? -1 : 0;
 		let dispatch = compose(handlers);
 
-		let handler: NextHandler = (context, next) => {
+		let handler: NextHandler = async (context, next) => {
 			let { request } = context;
 
-			let match = pattern.exec(request.url.path);
-			if (!match) return next();
+			if (!request.url.path.startsWith(path)) return next();
 
-			let prevHref = request.url.href;
 			let prevPath = request.url.path;
-			let prevParams = request.params;
+			let prevHref = request.url.href;
 
-			request.url.href = '/' + request.url.search;
-			request.url.path = '/';
-			request.params = match.groups || {};
+			let nextPath = request.url.path.slice(length + trailing) || '/';
+			let nextHref = nextPath + request.url.search;
 
-			return dispatch(context)
-				.finally(() => {
-					request.url.href = prevHref;
-					request.url.path = prevPath;
-					request.params = prevParams;
-				})
-				.then(next);
+			request.url.path = nextPath;
+			request.url.href = nextHref;
+
+			await dispatch(context, async () => {
+				request.url.path = prevPath;
+				request.url.href = prevHref;
+				await next();
+				request.url.path = nextPath;
+				request.url.href = nextHref;
+			});
+
+			request.url.path = prevPath;
+			request.url.href = prevHref;
 		};
 
 		this.middlewares.push(handler);
 		return this;
 	}
 
-	route (method: string, path: string, ...handlers: NextHandler[]): this {
+	route (method: string | false, path: string, ...handlers: NextHandler[]): this {
+		assert(method == false || typeof method == 'string', 'method must be a string or false');
 		assert(typeof path == 'string', 'path must be a string');
 		assert(handlers.every((h) => typeof h == 'function'), 'handler must be a function');
 
-		method = method.toUpperCase();
+		if (method) method = method.toUpperCase();
 		path = normalize(path);
 
 		let isHEAD = method == 'HEAD';
@@ -57,22 +62,29 @@ export class Router {
 		let pattern = compile(path);
 		let dispatch = compose(handlers);
 
-		let handler: NextHandler = (context, next) => {
+		let handler: NextHandler = async (context, next) => {
 			let { request } = context;
 
-			if (!(method == request.method || (isHEAD && request.method == 'GET'))) return next();
+			if (method && !(
+				(method == request.method) ||
+				(isHEAD && request.method == 'GET')
+			)) return next();
 
 			let match = pattern.exec(path);
 			if (!match) return next();
 
 			let prevParams = request.params;
-			request.params = match.groups || {};
+			let nextParams = match.groups || {};
 
-			return dispatch(context)
-				.finally(() => {
-					request.params = prevParams
-				})
-				.then(next);
+			request.params = nextParams;
+
+			await dispatch(context, async () => {
+				request.params = prevParams;
+				await next();
+				request.params = nextParams;
+			});
+
+			request.params = prevParams;
 		};
 
 		this.middlewares.push(handler);
