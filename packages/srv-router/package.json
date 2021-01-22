@@ -15,7 +15,7 @@
 		"README.md"
 	],
 	"scripts": {
-		"prepare": "pnpm run build",
+		"prepare": "rm -r dist; pnpm run build",
 		"build": "pnpm run build:lib && pnpm run build:types",
 		"build:lib": "node ../../build.mjs",
 		"build:types": "tsc"
