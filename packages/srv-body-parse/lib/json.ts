@@ -10,7 +10,7 @@ let JSON_TYPES = new Set([
 
 export function json (): NextHandler {
 	return function jsonHandler ({ request, response }, next) {
-		if (!request.rawBody || JSON_TYPES.has(request.type!)) return next();
+		if (!request.rawBody || !JSON_TYPES.has(request.type!)) return next();
 
 		try {
 			request.body = JSON.parse(request.rawBody.toString());
