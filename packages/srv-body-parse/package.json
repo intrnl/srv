@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@intrnl/srv-body-parse",
 	"description": "Parsed request body middleware for Srv",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "MIT",
 	"author": "intrnl",
 	"repository": {
