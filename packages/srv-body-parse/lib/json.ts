@@ -8,9 +8,11 @@ let JSON_TYPES = new Set([
 	'application/csp-report',
 ]);
 
-export function json (): NextHandler {
+export function json (opts: JSONOptions = {}): NextHandler {
+	let { types = JSON_TYPES } = opts;
+
 	return function jsonHandler ({ request, response }, next) {
-		if (!request.rawBody || !JSON_TYPES.has(request.type!)) return next();
+		if (!request.rawBody || (types && !types.has(request.type!))) return next();
 
 		try {
 			request.body = JSON.parse(request.rawBody.toString());
@@ -19,4 +21,8 @@ export function json (): NextHandler {
 			response.throw(400, err.message);
 		}
 	}
+}
+
+export interface JSONOptions {
+	types?: false | Set<string>,
 }
