@@ -24,9 +24,9 @@
 		"@intrnl/srv": "workspace:^0.2.0"
 	},
 	"devDependencies": {
-		"@intrnl/srv": "workspace:^0.2.0"
+		"@intrnl/srv": "workspace:^0.2.2"
 	},
 	"dependencies": {
-		"@intrnl/path-builder": "^0.1.2"
+		"@intrnl/path-builder": "^0.1.3"
 	}
 }

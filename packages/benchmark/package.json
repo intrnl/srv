@@ -2,10 +2,10 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"@intrnl/srv": "workspace:^0.2.0",
+		"@intrnl/srv": "workspace:^0.2.2",
 		"@intrnl/srv-router": "workspace:^0.2.0",
 		"express": "^4.17.1",
-		"koa": "^2.13.0",
+		"koa": "^2.13.1",
 		"koa-router": "^10.0.0",
 		"polka": "^0.5.2"
 	}
