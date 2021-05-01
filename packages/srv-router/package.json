@@ -27,6 +27,6 @@
 		"@intrnl/srv": "workspace:^0.2.2"
 	},
 	"dependencies": {
-		"@intrnl/path-builder": "^0.1.3"
+		"@intrnl/route-matcher": "^0.1.4"
 	}
 }

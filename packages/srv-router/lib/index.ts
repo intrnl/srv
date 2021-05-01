@@ -1,6 +1,6 @@
 import { ok as assert } from 'assert';
 import { compose } from '@intrnl/srv';
-import { compile } from '@intrnl/path-builder';
+import { compile } from '@intrnl/route-matcher';
 
 import type { NextHandler } from '@intrnl/srv';
 
