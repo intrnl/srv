@@ -15,7 +15,7 @@ importers:
   packages/benchmark:
     specifiers:
       '@intrnl/srv': workspace:^0.2.2
-      '@intrnl/srv-router': workspace:^0.2.0
+      '@intrnl/srv-router': workspace:^0.2.1
       express: ^4.17.1
       koa: ^2.13.1
       koa-router: ^10.0.0

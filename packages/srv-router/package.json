@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@intrnl/srv-router",
 	"description": "Router middleware for Srv",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"license": "MIT",
 	"author": "intrnl",
 	"repository": {
